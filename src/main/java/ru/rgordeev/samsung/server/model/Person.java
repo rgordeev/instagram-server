@@ -17,6 +17,7 @@ public class Person {
     private String lastName;
     private Integer age;
     private String bio;
+    private String avatar;
 
     @Override
     public boolean equals(Object o) {
