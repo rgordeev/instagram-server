@@ -8,9 +8,10 @@ import java.util.stream.Stream;
 
 public interface FileStorageService {
     void init();
-    void save(MultipartFile file);
+    void save(MultipartFile file, Long personId);
     Stream<Path> get();
     Path get(String fileName);
     Resource getResource(String fileName);
+    Resource getFileById(Long fileId);
     void delete();
 }
