@@ -20,27 +20,27 @@ public class PersonController {
 
     @GetMapping(path = "/", produces = "application/json")
     public List<Person> listPersons() {
-        return personRepository.listPersons();
+        return personRepository.findAll();
     }
 
     @GetMapping(path = "/{id}", produces = "application/json")
     public Person getPerson(@PathVariable(name = "id") Long id) {
-        return personRepository.getPersonById(id);
+        return personRepository.getOne(id);
     }
 
     @PutMapping(path = "/", consumes = "application/json")
     public void addPerson(@RequestBody Person person) {
-        personRepository.addPerson(person);
+        personRepository.save(person);
     }
 
     @PostMapping(path = "/", consumes = "application/json", produces = "application/json")
     public Person updatePerson(@RequestBody Person person) {
-        return personRepository.updatePerson(person);
+        return personRepository.save(person);
     }
 
     @DeleteMapping(path = "/{id}")
     public void deletePerson(@PathVariable Long id) {
-        personRepository.delete(id);
+        personRepository.deleteById(id);
     }
 
 }

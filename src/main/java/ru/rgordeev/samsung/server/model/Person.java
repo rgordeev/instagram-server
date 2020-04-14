@@ -1,15 +1,22 @@
 package ru.rgordeev.samsung.server.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class Person {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String login;
     private String password;
@@ -17,7 +24,19 @@ public class Person {
     private String lastName;
     private Integer age;
     private String bio;
-    private String avatar;
+    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
+    private Set<File> avatar;
+
+    public void addAvatar(File avatar) {
+        this.avatar.add(avatar);
+        avatar.setPerson(this);
+    }
+
+    public void removeAvatar(File avatar) {
+        this.avatar.remove(avatar);
+        avatar.setPerson(null);
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -30,5 +49,18 @@ public class Person {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                ", bio='" + bio + '\'' +
+                '}';
     }
 }

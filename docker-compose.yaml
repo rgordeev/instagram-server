@@ -1,0 +1,37 @@
+version: "3.4"
+services:
+  postgres:
+    image: postgres:12
+    ports:
+      - '5432:5432'
+    volumes:
+      - 'postgres-db-data:/var/lib/postgresql/data'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=instagram
+      - PG_TRUST_LOCALNET
+    networks:
+      backend: { aliases: [postgres.backend] }
+
+  app:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    image: instagram/server
+    ports:
+      - '8080:8080'
+    depends_on:
+      - postgres
+    volumes:
+      - app-logs:/usr/local/tomcat/logs
+    networks:
+      backend: { aliases: [app.backend] }
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  postgres-db-data:
+  app-logs:
