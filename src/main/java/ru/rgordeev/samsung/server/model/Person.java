@@ -27,16 +27,15 @@ public class Person {
     @OneToMany(mappedBy = "person", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
     private Set<File> avatar;
 
-    public void addAvatar(File avatar) {
-        this.avatar.add(avatar);
-        avatar.setPerson(this);
+    public void addAvatar(File file) {
+        this.avatar.add(file);
+        file.setPerson(this);
     }
 
-    public void removeAvatar(File avatar) {
-        this.avatar.remove(avatar);
-        avatar.setPerson(null);
+    public void removeAvatar(File file) {
+        this.removeAvatar(file);
+        file.setPerson(null);
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -59,8 +58,6 @@ public class Person {
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", age=" + age +
-                ", bio='" + bio + '\'' +
                 '}';
     }
 }

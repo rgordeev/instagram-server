@@ -1,6 +1,7 @@
 package ru.rgordeev.samsung.server.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -14,24 +15,15 @@ import ru.rgordeev.samsung.server.service.FileStorageService;
 public class FilesController {
     private final FileStorageService fileStorageService;
 
+    @Autowired
     public FilesController(FileStorageService fileStorageService) {
         this.fileStorageService = fileStorageService;
     }
 
-    @GetMapping
-    @ResponseBody
-    public ResponseEntity<Resource> getFileByName(@RequestParam(name = "name") String filename) {
-        Resource file = fileStorageService.getResource(filename);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
-                .header(HttpHeaders.CONTENT_TYPE, "image/jpg")
-                .body(file);
-    }
-
     @GetMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<Resource> getFileById(@PathVariable Long id) {
-        Resource file = fileStorageService.getFileById(id);
+    public ResponseEntity<Resource> getFileByName(@PathVariable Long id) {
+        Resource file = fileStorageService.getResource(id);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
                 .header(HttpHeaders.CONTENT_TYPE, "image/jpg")
@@ -39,8 +31,8 @@ public class FilesController {
     }
 
     @PostMapping("/")
-    public void uploadFileForPerson(@RequestParam("file") MultipartFile file, @RequestParam("personid") Long id) {
-        fileStorageService.save(file, id);
+    public void uploadFileForPerson(@RequestParam("file") MultipartFile file, @RequestParam("personId") Long personId) {
+        fileStorageService.save(file, personId);
     }
 
 }

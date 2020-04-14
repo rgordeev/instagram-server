@@ -11,7 +11,6 @@ public interface FileStorageService {
     void save(MultipartFile file, Long personId);
     Stream<Path> get();
     Path get(String fileName);
-    Resource getResource(String fileName);
-    Resource getFileById(Long fileId);
+    Resource getResource(Long id);
     void delete();
 }

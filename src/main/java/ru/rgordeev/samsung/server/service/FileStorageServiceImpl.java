@@ -23,7 +23,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -54,16 +53,16 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     @Override
     public void save(final MultipartFile file, final Long personId) {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        Path filePath = this.root.resolve(fileName);
+        final String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        final Path filePath = this.root.resolve(fileName);
         try (InputStream in = file.getInputStream()) {
             Person person = personRepository.getOne(personId);
-            ru.rgordeev.samsung.server.model.File f = new File();
-            f.setName(fileName);
+            File f = new File();
             f.setPath(filePath.toString());
+            f.setFileName(fileName);
             person.addAvatar(f);
             personRepository.save(person);
-            Files.copy(in, this.root.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(in, filePath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException | EntityNotFoundException e) {
             log.error("Error: {}", e);
         }
@@ -88,24 +87,10 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
 
     @Override
-    public Resource getResource(String fileName) {
+    public Resource getResource(Long id) {
         try {
-            Path path = get(fileName);
-            Resource resource = new UrlResource(path.toUri());
-            if (resource.exists() || resource.isReadable()) {
-                return resource;
-            }
-        } catch (MalformedURLException e) {
-            log.error("Error: {}", e);
-        }
-        return null;
-    }
-
-    @Override
-    public Resource getFileById(Long fileId) {
-        try {
-            File file = fileRepository.getOne(fileId);
-            Path path = get(file.getName());
+            File file = fileRepository.getOne(id);
+            Path path = get(file.getFileName());
             Resource resource = new UrlResource(path.toUri());
             if (resource.exists() || resource.isReadable()) {
                 return resource;
