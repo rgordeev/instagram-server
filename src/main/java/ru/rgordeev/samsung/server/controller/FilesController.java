@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.rgordeev.samsung.server.service.FileStorageService;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/files")
@@ -20,9 +22,16 @@ public class FilesController {
         this.fileStorageService = fileStorageService;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/person/{personId}")
     @ResponseBody
-    public ResponseEntity<Resource> getFileByName(@PathVariable Long id) {
+    public ResponseEntity<List<Long>> getFilesByPerson(@PathVariable Long personId) {
+        List<Long> personImageIDs = fileStorageService.listFileIDsByPersonId(personId);
+        return ResponseEntity.ok().body(personImageIDs);
+    }
+
+    @GetMapping("/id/{id}")
+    @ResponseBody
+    public ResponseEntity<Resource> getFileById(@PathVariable Long id) {
         Resource file = fileStorageService.getResource(id);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")

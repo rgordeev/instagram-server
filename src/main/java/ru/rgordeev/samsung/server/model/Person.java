@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -25,16 +26,21 @@ public class Person {
     private Integer age;
     private String bio;
     @OneToMany(mappedBy = "person", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
-    private Set<File> avatar;
+    private Set<File> images = new HashSet<>();
 
-    public void addAvatar(File file) {
-        this.avatar.add(file);
+    public void addImage(File file) {
+        this.images.add(file);
         file.setPerson(this);
     }
 
     public void removeAvatar(File file) {
-        this.removeAvatar(file);
+        this.images.remove(file);
         file.setPerson(null);
+    }
+
+    @Transient
+    public File getAvatar() {
+        return images.stream().findFirst().orElse(null);
     }
 
     @Override

@@ -4,6 +4,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.stream.Stream;
 
 public interface FileStorageService {
@@ -13,4 +14,5 @@ public interface FileStorageService {
     Path get(String fileName);
     Resource getResource(Long id);
     void delete();
+    List<Long> listFileIDsByPersonId(Long personId);
 }
