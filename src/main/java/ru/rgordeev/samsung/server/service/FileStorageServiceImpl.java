@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -60,7 +61,7 @@ public class FileStorageServiceImpl implements FileStorageService {
             File f = new File();
             f.setPath(filePath.toString());
             f.setFileName(fileName);
-            person.addAvatar(f);
+            person.addImage(f);
             personRepository.save(person);
             Files.copy(in, filePath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException | EntityNotFoundException e) {
@@ -104,5 +105,10 @@ public class FileStorageServiceImpl implements FileStorageService {
     @Override
     public void delete() {
         FileSystemUtils.deleteRecursively(this.root.toFile());
+    }
+
+    @Override
+    public List<Long> listFileIDsByPersonId(Long personId) {
+        return fileRepository.findAllByPersonId(personId);
     }
 }
