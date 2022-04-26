@@ -29,7 +29,7 @@ public class FilesController {
         return ResponseEntity.ok().body(personImageIDs);
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<Resource> getFileById(@PathVariable Long id) {
         Resource file = fileStorageService.getResource(id);

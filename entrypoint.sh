@@ -2,15 +2,15 @@
 set -e
 
 if [ -z "$SPRING_DATASOURCE_URL" ]; then
-  SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5434/omnibots
+  SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/instagram
 fi
 
 if [ -z "$SPRING_DATASOURCE_USERNAME" ]; then
-  SPRING_DATASOURCE_USERNAME=omnibots
+  SPRING_DATASOURCE_USERNAME=postgres
 fi
 
 if [ -z "$SPRING_DATASOURCE_PASSWORD" ]; then
-  SPRING_DATASOURCE_PASSWORD=123456
+  SPRING_DATASOURCE_PASSWORD=postgres
 fi
 
 if [ -z "$SERVER_PORT" ]; then
